@@ -21,7 +21,7 @@ hi Normal	guifg=gray guibg=grey17 gui=none
 
 " highlight groups
 hi Cursor       guifg=black          guibg=yellow   gui=none
-hi ErrorMsg     guifg=white          guibg=red      gui=none
+hi ErrorMsg     guifg=white          guibg=#693837 gui=none
 hi VertSplit    guifg=gray40         guibg=gray40   gui=none
 hi Folded       guifg=DarkSlateGray3 guibg=grey30   gui=none
 hi FoldColumn   guifg=tan            guibg=grey30   gui=none

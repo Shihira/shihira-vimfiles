@@ -1,4 +1,3 @@
-
 function! g:GotoMostWindow(direction)
 	execute winnr() . "wincmd " . a:direction 
 endfunction

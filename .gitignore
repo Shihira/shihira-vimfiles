@@ -1,3 +1,13 @@
-tags
+#directories
+/tags/
+/bundle/*/
+
+#file types
 *.tags
 *.swp
+*.pyd
+*.dll
+*.pyc
+
+#negate
+!/bundle/vundle/

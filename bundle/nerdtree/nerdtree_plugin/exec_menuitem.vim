@@ -34,16 +34,7 @@ function! NERDTreeExecFile()
     let cmd = input(':!', cmd . ' ')
 
     if cmd != ''
-            let file_dir = treenode.path.getDir().str()
-            let answer = input('Will cd ' . file_dir . ': ', 'y')
-            if answer == 'y'
-                let cur_dir = getcwd()
-                execute "cd " . treenode.path.getDir().str()
-                exec ":!" . cmd
-                execute "cd " . cur_dir
-            else
-                exec ':!' . cmd
-            endif
+        exec ':!' . cmd
     else
         echo "Aborted"
     endif

@@ -1,24 +1,8 @@
-let s:program_path = $VIM . "/../../Program"
-let s:clang_path = $VIM . "/../Clang"
+cd E:/Program
 
-let include_path = []
-let include_path += ["../build"]
-let include_path += ["../include"]
-let include_path += [s:clang_path   . "/win32-include"]
-let include_path += [s:clang_path   . "/std-include"]
-let include_path += [s:program_path . "/tinyxml/include"]
-let include_path += [s:program_path . "/curl/include"]
-let include_path += [s:program_path . "/utility/include"]
-let include_path += [s:program_path . "/shihira-eye/include"]
-let include_path += [s:program_path . "/shihira-eye/build"]
-let include_path += [s:program_path . "/shihira-boomshine/include"]
-let include_path += [s:program_path . "/shihira-boomshine/build"]
-let include_path += [s:program_path . "/shihira-htmlgen/include"]
-let include_path += [s:program_path . "/shihira-htmlgen/build"]
-let include_path += [s:program_path . "/qt/include"]
-let include_path += [s:program_path . "/qt/include/QtGui"]
-let include_path += [s:program_path . "/qt/include/QtCore"]
-let include_path += [s:program_path . "/qt/include/QtNetwork"]
+set guifont=Dejavu_Sans_Mono:h9
+set guifontwide=SimHei:h9
+set winaltkeys=no
+set tags+=$VIMFILES/tags/cfake.tags;
+set tags+=$VIMFILES/tags/qt.tags;
 
-let g:clang_library_path = s:clang_path . "/bin"
-let g:git_bin = "D:/Software/Git/bin/git.exe"

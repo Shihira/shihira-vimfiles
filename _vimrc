@@ -1,23 +1,34 @@
+let $VIMFILES = expand("<sfile>:p:h")
+
 set nocompatible 
+set noshowmode
+set noerrorbells
 set nobackup
+set noswapfile
 set nowrap
 set hlsearch
 set incsearch
 set autoindent
 set cindent
 set guioptions=egmrLt
-set guifont=DejaVu_Sans_Mono:h9
 set number
 set ruler
-set fileencodings=ucs-bom,utf-8,gbk
+set encoding=utf-8
+set fileencodings=ucs-bom,utf-8,big-5,gbk
 set completeopt-=preview
 set tabstop=8
 set shiftwidth=8
 set expandtab
-set errorformat^=%-GIn\ file\ included\ %.%# 
+set rtp+=$VIMFILES
 
-call pathogen#infect()
 filetype plugin indent on
+au FileType python setl sw=8 sts=8 et
+au FileType xml setl sw=4 sts=4 et
+au FileType svg setl sw=4 sts=4 et
+au FileType html setl sw=4 sts=4 et
+
+"//////////////////////////////////////////////////////////
+"Platform detection and settings
 
 let g:os = "unix"
 if has("win32")
@@ -26,31 +37,30 @@ elseif has("mac")
         let g:os = "mac"
 endif
 
-"//////////////////////////////////////////////////////////
-
-let $VIMFILES = expand("<sfile>:p:h")
-
-set tags+=$VIMFILES/tags/include.tags;
-set tags+=$VIMFILES/tags/asio.tags;
-
-if g:os == "unix"
-source $VIMFILES/unix_feature.vim
-elseif g:os == "win32"
-source $VIMFILES/win32_feature.vim
-endif
+exec "source $VIMFILES/".g:os."_feature.vim"
 source $VIMFILES/function.vim
-source $VIMFILES/plugin.vim
+for path in split(globpath($VIMFILES, 'bundle/**.vim'), "\n")
+        exec "source " . path
+endfor
 
+"//////////////////////////////////////////////////////////
 "MAPPING
-nmap <F3>  <C-W>
-nmap <C-TAB> :bn!<CR>
-nmap <S-Tab> <F3>kd<F3>j
+
+nnoremap <A-e> <C-w>
+nnoremap <A-]> <C-]>
+nnoremap <A-t> <C-t>
+inoremap <A-f> <Esc>
+inoremap <A-j> <C-n>
+inoremap <A-k> <C-p>
+nmap <A-j> <C-d>
+nmap <A-k> <C-u>
+nmap <F3> <C-W>
 imap <BS> <Left><Del>
 imap <C-Tab> <Esc><Tab>
 nmap <F12> :w<CR>:call g:RefreshCtags("--languages=c,c++ ", "")<CR>
+nmap <S-F12> :w<CR>:call g:RefreshCtags("--language-force=c++ ", "")<CR>
 nmap <C-B><C-S> 0f,llv%%hx%plvf,hxlp
 noremap <ESC> :nohl<CR>
-
 
 colorscheme desertEx
 syntax enable
