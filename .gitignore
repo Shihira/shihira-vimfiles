@@ -10,4 +10,3 @@
 *.pyc
 
 #negate
-!/bundle/vundle/

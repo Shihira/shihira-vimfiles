@@ -12,12 +12,12 @@
 "       Simply put this file in the ~/.vim/plugin directory,
 "       and run :ToggleType to start.
 "
-"       :ToggleType    toggle TypeGame in place
+"       :ToggleType     toggle TypeGame in place
 "                       DON'T run this command the second time
 "                       unless you've run ExitType to delete
 "                       all buffers that TypeGame created.
 "
-"       :ExitType      clear all TypeGame buffers, and recover
+"       :ExitType       clear all TypeGame buffers, and recover
 "                       the original buffer in place.
 "               
 "
