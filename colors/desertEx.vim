@@ -13,7 +13,7 @@ if version > 580
 endif
 let g:colors_name="desertEx"
 
-hi Normal	guifg=gray guibg=grey17 gui=none
+hi Normal	guifg=lightgray guibg=grey17 gui=none
 
 " AlignCtrl default
 " AlignCtrl =P0 guifg guibg gui
@@ -22,19 +22,19 @@ hi Normal	guifg=gray guibg=grey17 gui=none
 " highlight groups
 hi Cursor       guifg=black          guibg=yellow   gui=none
 hi ErrorMsg     guifg=white          guibg=#693837 gui=none
-hi VertSplit    guifg=gray40         guibg=gray40   gui=none
+hi VertSplit    guifg=gray20         guibg=gray20   gui=none
 hi Folded       guifg=DarkSlateGray3 guibg=grey30   gui=none
 hi FoldColumn   guifg=tan            guibg=grey30   gui=none
 hi IncSearch    guifg=#b0ffff        guibg=#2050d0
 hi LineNr       guifg=burlywood3     gui=none
 hi ModeMsg      guifg=SkyBlue        gui=none
 hi MoreMsg      guifg=SeaGreen       gui=none
-hi NonText      guifg=cyan           gui=none
+hi NonText      guifg=#555555        gui=none
 hi Question     guifg=springgreen    gui=none
 hi Search       guifg=gray80         guibg=#445599  gui=none
 hi SpecialKey   guifg=cyan           gui=none
-hi StatusLine   guifg=black          guibg=#c2bfa5  gui=bold
-hi StatusLineNC guifg=grey           guibg=gray40   gui=none
+hi StatusLine   guifg=black          guibg=gray20   gui=bold
+hi StatusLineNC guifg=grey           guibg=gray20   gui=none
 hi Title        guifg=indianred      gui=none
 hi Visual       guifg=gray17         guibg=tan1     gui=none
 hi WarningMsg   guifg=salmon         gui=none
@@ -46,6 +46,7 @@ hi DiffAdd      guifg=black          guibg=wheat1
 hi DiffChange   guifg=black          guibg=skyblue1
 hi DiffText     guifg=black          guibg=hotpink1  gui=none
 hi DiffDelete   guibg=gray45         guifg=black     gui=none
+hi ColorColumn  guibg=#272727
 
 
 
@@ -96,3 +97,5 @@ hi Type         ctermfg=2
 hi Underlined   cterm=underline      ctermfg=5
 hi Ignore       ctermfg=darkgrey
 hi Error        cterm=bold           ctermfg=7        ctermbg=1
+
+" custom highlight modification

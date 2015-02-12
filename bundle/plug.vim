@@ -2,10 +2,12 @@ let d = $VIMFILES . "/bundle/"
 
 call plug#begin(d)
 
-Plug 'fholgado/minibufexpl.vim',                {'dir': d.'minibufexpl'}
 Plug 'Valloric/YouCompleteMe',                  {'dir': d.'youcompleteme', 'on': ['YCMComes'] }
-Plug 'lilydjwg/colorizer',                      {'dir': d.'colorizer'}
-Plug 'scrooloose/nerdtree',                     {'dir': d.'nerdtree'}
-Plug 'vim-scripts/c.vim',                       {'dir': d.'cvim'}
+Plug 'lilydjwg/colorizer'
+Plug 'scrooloose/nerdtree'
+Plug 'mattn/emmet-vim'
+Plug 'jmcantrell/vim-virtualenv',               {'dir': d.'virtualenv'}
+Plug 'neilagabriel/vim-geeknote',               {'dir': d.'geeknote'}
+Plug 'bling/vim-airline',                       {'dir': d.'airline'}
 
 call plug#end()
