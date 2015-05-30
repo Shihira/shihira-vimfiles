@@ -65,8 +65,6 @@ imap <C-Tab> <Esc><Tab>
 nmap <F12> :w<CR>:call g:RefreshCtags("--languages=c,c++ ", "")<CR>
 nmap <S-F12> :w<CR>:call g:RefreshCtags("--language-force=c++ ", "")<CR>
 nmap <C-B><C-S> 0f,llv%%hx%plvf,hxlp
-nmap <F9> :call g:SuperF9(0)<CR>
-nmap <C-F9> :call g:SuperF9(1)<CR>
 noremap <ESC> :nohl<CR>
 
 colorscheme desertEx

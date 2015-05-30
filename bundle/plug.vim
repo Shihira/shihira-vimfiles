@@ -10,5 +10,6 @@ Plug 'jmcantrell/vim-virtualenv',               {'dir': d.'virtualenv'}
 Plug 'neilagabriel/vim-geeknote',               {'dir': d.'geeknote'}
 Plug 'bling/vim-airline',                       {'dir': d.'airline'}
 Plug 'fholgado/minibufexpl.vim',                {'dir': d.'minibufexpl'}
+Plug 'amoffat/snake',                           {'dir': d.'snake'}
 
 call plug#end()

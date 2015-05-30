@@ -4,13 +4,25 @@ shihira-vimfiles
 USAGE
 -----------
 
-1. Place the files everywhere you can access;
-2. Add this path to runtimepath using `set rtp`;
-3. Run _vimrc using `source _vimrc` *(DONT MOVE _vimrc)*;
-4. See if *****_feature.vim satisfies your demand;
-5. Because I use Plug to manage plugins, running `PlugInstall` can pull plugins
-   from github automatically.
-6. There're many key mappings, read _vimrc and do experiments for more
-   Infomation.
+1. Clone this repo into directory ~/.vim. Note that if your directory is not
+   ~/.vim, it is not guaranteed that the configuration could work well.
+2. Create two rc-files and make sure that python is usable for vim:
 
-_vimrc adds an environment variable $VIMFILES.
+        ```
+        echo source ~/.vim/_vimrc > ~/.vimrc
+        echo import sys > ~/.vimrc.py
+        echo "sys.path.append('$HOME/.vim')" >> ~/.vimrc.py
+        echo import _vimrc > ~/.vimrc.py
+        ```
+
+3. Then run `:PlugInstall` to pull all plugins from github and install.
+4. Follow <http://valloric.github.io/YouCompleteMe/> to build and install YCM.
+5. Happy viming!
+
+FEATURES
+------------
+
+1. Typegame plugin `typegame.vim`. See the source for details.
+2. F9 to compile with custom command or built-in command (with custom flags attached).
+3. Using Plug to manager plugins.
+
