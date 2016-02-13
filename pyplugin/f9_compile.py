@@ -3,12 +3,14 @@ from functools import *
 import re
 
 cmd_map = {
-        "c": ["gcc <filename> -o <basename> -Wall -g -std=c99 -O0",
-                "cd <dirname> && <basename>"],
-        "cpp": ["g++ <filename> -o <basename> -Wall -g -std=c++11 -O0",
-                "cd <dirname> && <basename>"],
-        "dot": ["dot -Tpng <filename> -o <basename>.png",
-                "shotwell <basename>.png &"],
+        "c": ["gcc <filename> -o <dirname>/<basename> -Wall -g -std=c99 -O0",
+                "cd <dirname> && <dirname>/<basename>"],
+        "cpp": ["g++ <filename> -o <dirname>/<basename> -Wall -g -std=c++11 -O0",
+                "cd <dirname> && <dirname>/<basename>"],
+        "java": ["javac <filename>",
+                "cd <dirname> && java <basename>"],
+        "dot": ["dot -Tpng <filename> -o <dirname>/<basename>.png",
+                "shotwell <dirname>/<basename>.png &"],
 }
 
 cmd_pattern = {
@@ -26,10 +28,11 @@ cflags_pattern = {
 }
 
 def execute_complication(exec_cmd):
+        command("set makeprg=make")
         global cmd_map, cmd_pattern
 
         filename = expand("%:p")
-        basename = expand("%:p:r")
+        basename = expand("%:p:t:r")
         dirname = expand("%:p:h")
 
         filetype = get_option("filetype")
@@ -54,11 +57,10 @@ def execute_complication(exec_cmd):
                         .replace("<filename>", filename) \
                         .replace("<dirname>",  dirname)
 
-        org_make = vim.options["makeprg"]
         vim.options['makeprg'] = " && " \
                         .join(commands[:exec_cmd])
         command("make")
-        vim.options["makeprg"] = org_make
+        #command("set makeprg=make")
 
 key_map("<F9>", partial(execute_complication, 1))
 key_map("<C-F9>", partial(execute_complication, 2))

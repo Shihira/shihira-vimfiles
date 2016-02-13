@@ -8,12 +8,11 @@ USAGE
    ~/.vim, it is not guaranteed that the configuration could work well.
 2. Create two rc-files and make sure that python is usable for vim:
 
-        ```
         echo source ~/.vim/_vimrc > ~/.vimrc
         echo import sys > ~/.vimrc.py
         echo "sys.path.append('$HOME/.vim')" >> ~/.vimrc.py
         echo import _vimrc > ~/.vimrc.py
-        ```
+
 
 3. Then run `:PlugInstall` to pull all plugins from github and install.
 4. Follow <http://valloric.github.io/YouCompleteMe/> to build and install YCM.

@@ -1,6 +1,7 @@
-nmap mc :call youcompleteme#Enable()<CR>
+autocmd! User youcompleteme call youcompleteme#Enable()
 
 let g:ycm_global_ycm_extra_conf = $VIMFILES . '/.ycm_extra_conf.py'
 let g:ycm_use_ultisnips_completer = 1
 
-au VimEnter * silent! YCMComes
+let g:EclimCompletionMethod = 'omnifunc'
+

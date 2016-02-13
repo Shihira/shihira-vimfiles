@@ -10,27 +10,25 @@ set hlsearch
 set incsearch
 set autoindent
 set cindent
-set guioptions=egrmLt
+set guioptions=egrmt
 set number
 set ruler
 set encoding=utf-8
 set fileencodings=ucs-bom,utf-8,big-5,gbk
 set completeopt-=preview
-set tabstop=8
-set shiftwidth=8
+set tabstop=4
+set shiftwidth=4
 set expandtab
 set textwidth=80
 set rtp+=$VIMFILES
 set winaltkeys=no
 set laststatus=2
+set makeprg=make
 let &colorcolumn=join(range(81,999),",")
 
 
 filetype plugin indent on
-au FileType python setl sw=8 sts=8 et
-au FileType xml setl sw=4 sts=4 et
-au FileType svg setl sw=4 sts=4 et
-au FileType html setl sw=4 sts=4 et
+au FileType html setl sw=2 sts=2 et
 
 "//////////////////////////////////////////////////////////
 "Platform detection and settings
@@ -48,6 +46,30 @@ for path in split(globpath($VIMFILES, 'bundle/**.vim'), "\n")
         exec "source " . path
 endfor
 
+"///////////////////////////////////////////////////////////
+"Initializing
+
+function! g:OpenMyLayout()
+    silent! PlugLoadYcm
+    call youcompleteme#Enable()
+    exec "NERDTreeFind"
+    exec "TagbarToggle"
+    call g:GotoMostWindow('l')
+    exec "wincmd J"
+    call g:GotoMostWindow('k')
+    call g:GotoMostWindow('l')
+    exec "wincmd L"
+    call g:GotoMostWindow('h')
+    call g:GotoMostWindow('k')
+    call g:SetWindowWidth(22)
+    normal gg
+    exec "wincmd ="
+    exec "wincmd l"
+    exec "MBEToggle"
+
+    call youcompleteme#Enable()
+endfunction
+
 "//////////////////////////////////////////////////////////
 "MAPPING
 
@@ -62,10 +84,11 @@ nmap <A-k> <C-u>
 nmap <F3> <C-W>
 imap <BS> <Left><Del>
 imap <C-Tab> <Esc><Tab>
-nmap <F12> :w<CR>:call g:RefreshCtags("--languages=c,c++ ", "")<CR>
-nmap <S-F12> :w<CR>:call g:RefreshCtags("--language-force=c++ ", "")<CR>
-nmap <C-B><C-S> 0f,llv%%hx%plvf,hxlp
-noremap <ESC> :nohl<CR>
+nmap <C-B><C-S> %v%s<Space><Esc>:call RotateParentheses()<CR>vp
+noremap <Esc> :nohl\|set nocul<CR><Esc>
+command OpenMyLayout call g:OpenMyLayout()
+nmap mm :OpenMyLayout<CR>
+nmap md :call g:ShowDefinition(5)<CR>
 
 colorscheme desertEx
 syntax enable

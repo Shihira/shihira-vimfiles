@@ -1,5 +1,5 @@
 function! g:GotoMostWindow(direction)
-	execute winnr() . "wincmd " . a:direction 
+	execute "10wincmd " . a:direction 
 endfunction
 
 function! g:SetWindowWidth(width)
@@ -11,24 +11,4 @@ function! g:SetWindowWidth(width)
 		execute - cur_width . "wincmd >"
 	endif
 endfunction
-
-function! g:RefreshCtags(language, name)
-	let cur_dir = getcwd()
-        let div_idx = strridx(cur_dir, "\\")
-        let tag_name = strpart(cur_dir, div_idx + 1, strlen(cur_dir) - div_idx - 1)
-
-        if a:name != ""
-                let tag_name = a:name
-        endif
-
-	execute "cd $VIMFILES/tags/"
-	execute "!ctags -R " . a:language . " --c++-kinds=+p --fields=+iaS --extra=+q -f " . tag_name . ".tags " . cur_dir
-        execute "cd " . cur_dir
-endfunction
-
-let g:cp_types = {
-      \ "c": ["gcc %s -o %s -Wall -g -std=c99 -O0", "%s", ""],
-      \ "cpp": ["g++ %s -o %s -Wall -g -std=c++11 -O0", "%s", ""],
-      \ "dot": ["dot -Tpng %s -o %s", "shotwell %s &", ".png"],
-      \ }
 

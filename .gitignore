@@ -1,5 +1,6 @@
 #directories
 /tags/
+/eclim/
 /bundle/*/
 
 #file types
