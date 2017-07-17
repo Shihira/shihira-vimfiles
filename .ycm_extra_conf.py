@@ -43,49 +43,9 @@ flags = [
 # For a C project, you would set this to 'c' instead of 'c++'.
 '-x',
 'c++',
-'-I',
-'./build',
-'-I',
-'./include'
+'-isystem',
+'/usr/include/guile/2.0'
 ]
-
-############################################################
-# Shihira's Customization - win32
-if os.name == "nt":
-        flags += [
-                '-isystem',
-                'D:/MinGW/include',
-                '-isystem',
-                'D:/MinGW/include/c++/4.8.1',
-                '-isystem',
-                'D:/MinGW/include/c++/4.8.1/i686-pc-mingw32',
-        ]
-
-        # Qt includes and all its sub-directories
-        flags += ['-isystem', 'E:/Program/lib/Qt/Qt5.2.1/5.2.1/mingw48_32/include']
-        mydir = glob.glob('E:/Program/lib/Qt/Qt5.2.1/5.2.1/mingw48_32/include/Qt*/')
-        for d in mydir: flags += ['-isystem', d]
-
-        # My Program Dirs
-        mydir = glob.glob('E:/Program/*/')
-        mydir += glob.glob('E:/Program/*/include')
-        mydir += glob.glob('E:/Program/*/build')
-        for d in mydir: flags += ['-I', d]
-
-############################################################
-# Shihira's Customization - fedora spec
-
-if os.name == "posix":
-        flags += ["-isystem", "/usr/include/qt5"]
-        subdir = os.listdir("/usr/include/qt5")
-        subdir += [os.path.join("/usr/include/qt5", sd) for sd in subdir]
-        for sd in subdir: flags += ["-isystem", sd]
-
-        # My Program Dirs
-        mydir = glob.glob('/home/shihira/Program/*/')
-        mydir += glob.glob('/home/shihira/Program/*/include')
-        mydir += glob.glob('/home/shihira/Program/*/build')
-        for d in mydir: flags += ['-I', d]
 
 # Set this to the absolute path to the folder (NOT the file!) containing the
 # compile_commands.json file to use that instead of 'flags'. See here for
@@ -174,6 +134,15 @@ def FlagsForFile( filename, **kwargs ):
   else:
     relative_to = DirectoryOfThisScript()
     final_flags = MakeRelativePathsInFlagsAbsolute( flags, relative_to )
+
+  ##############################################################################
+  # Shihira's Configuration
+  dirname = os.path.dirname(filename)
+  final_flags += [
+    "-I", os.path.join(dirname, "../src"),
+    "-I", os.path.join(dirname, "../include"),
+    "-I", os.path.join(dirname, "../build"),
+  ]
 
   return {
     'flags': final_flags,

@@ -1,7 +1,7 @@
 import snake
 from . import function_map
 
-def show_definition(winnr):
+def show_goto(func, winnr):
     if snake.get_buffer_in_window(winnr) == -1:
         print "Window does not exist."
         return
@@ -13,7 +13,7 @@ def show_definition(winnr):
     snake.set_buffer(bufnr)
     snake.set_cursor_position(pos)
 
-    snake.command("YcmCompleter GoToDefinition")
+    snake.command("YcmCompleter GoTo" + func)
     snake.set_option("cursorline")
     snake.command("au BufWinEnter * set nocursorline")
     snake.command("%d wincmd w" % cur_winnr)
@@ -44,6 +44,6 @@ def rotate_parentheses():
 
     snake.set_register('"', proc % (", ".join(new_cont_list)))
 
-function_map("ShowDefinition", show_definition)
+function_map("ShowGoTo", show_goto)
 function_map("RotateParentheses", rotate_parentheses)
 

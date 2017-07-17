@@ -10,16 +10,15 @@ set hlsearch
 set incsearch
 set autoindent
 set cindent
-set guioptions=egrmt
+set guioptions=egmtr
 set number
 set ruler
 set encoding=utf-8
-set fileencodings=ucs-bom,utf-8,big-5,gbk
+set fileencodings=ucs-bom,utf-8,gbk,big-5
 set completeopt-=preview
 set tabstop=4
 set shiftwidth=4
 set expandtab
-set textwidth=80
 set rtp+=$VIMFILES
 set winaltkeys=no
 set laststatus=2
@@ -29,6 +28,8 @@ let &colorcolumn=join(range(81,999),",")
 
 filetype plugin indent on
 au FileType html setl sw=2 sts=2 et
+au BufRead,BufNewFile *.cl setl filetype=opencl
+au BufRead,BufNewFile *.md setl wrap
 
 "//////////////////////////////////////////////////////////
 "Platform detection and settings
@@ -50,11 +51,18 @@ endfor
 "Initializing
 
 function! g:OpenMyLayout()
+    echo "Loading YouCompleteMe..."
     silent! PlugLoadYcm
     call youcompleteme#Enable()
+
+    echo "Loading Python Snake..."
+    silent! PlugLoadSnake
+
+    echo "Loading Layouts Windows..."
     exec "NERDTreeFind"
     exec "TagbarToggle"
     call g:GotoMostWindow('l')
+    setlocal noballooneval
     exec "wincmd J"
     call g:GotoMostWindow('k')
     call g:GotoMostWindow('l')
@@ -66,14 +74,12 @@ function! g:OpenMyLayout()
     exec "wincmd ="
     exec "wincmd l"
     exec "MBEToggle"
-
-    call youcompleteme#Enable()
 endfunction
 
 "//////////////////////////////////////////////////////////
 "MAPPING
 
-nnoremap <A-e> <C-w>
+nnoremap <A-w> <C-w>
 nnoremap <A-]> <C-]>
 nnoremap <A-t> <C-t>
 inoremap <A-f> <Esc>
@@ -81,16 +87,22 @@ inoremap <A-j> <C-n>
 inoremap <A-k> <C-p>
 nmap <A-j> <C-d>
 nmap <A-k> <C-u>
-nmap <F3> <C-W>
+nmap j gj
+nmap k gk
 imap <BS> <Left><Del>
-imap <C-Tab> <Esc><Tab>
+"imap <C-Tab> <Esc><Tab>
+nmap <Tab> :call SwitchInputWindow(4, 5)<CR>
 nmap <C-B><C-S> %v%s<Space><Esc>:call RotateParentheses()<CR>vp
 noremap <Esc> :nohl\|set nocul<CR><Esc>
+nmap <C-T> :call g:GotoWindowId(1)<CR>
+nmap <C-E> :call g:GotoWindowId(2)<CR>
 command OpenMyLayout call g:OpenMyLayout()
-nmap mm :OpenMyLayout<CR>
-nmap md :call g:ShowDefinition(5)<CR>
+command -nargs=1 Recode e ++enc=<args>
+nmap mM :OpenMyLayout<CR>
+nmap mD :call g:ShowGoTo("Definition", 5)<CR>
+nmap mC :call g:ShowGoTo("Declaration", 5)<CR>
 
-colorscheme desertEx
+colorscheme sierra
 syntax enable
 syntax on
 

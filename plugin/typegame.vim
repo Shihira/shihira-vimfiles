@@ -51,7 +51,7 @@ eof
         let src_buf = winbufnr(winnr())
 
         "create a temporary buffer
-        edit [TypeGame]
+        edit! [TypeGame]
         setl buftype=nofile
         setl nobuflisted
         setl nocin noai nosi

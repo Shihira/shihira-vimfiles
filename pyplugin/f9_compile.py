@@ -1,5 +1,4 @@
 from snake import *
-from functools import *
 import re
 
 cmd_map = {
@@ -62,6 +61,6 @@ def execute_complication(exec_cmd):
         command("make")
         #command("set makeprg=make")
 
-key_map("<F9>", partial(execute_complication, 1))
-key_map("<C-F9>", partial(execute_complication, 2))
+key_map("<F9>", lambda: execute_complication(1))
+key_map("<C-F9>", lambda: execute_complication(2))
 

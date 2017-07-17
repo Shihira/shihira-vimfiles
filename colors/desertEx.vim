@@ -46,9 +46,6 @@ hi DiffAdd      guifg=black          guibg=wheat1
 hi DiffChange   guifg=black          guibg=skyblue1
 hi DiffText     guifg=black          guibg=hotpink1  gui=none
 hi DiffDelete   guibg=gray45         guifg=black     gui=none
-hi ColorColumn  guibg=#272727
-
-
 
 " syntax highlighting groups
 hi Comment      guifg=SkyBlue	     gui=none
@@ -99,3 +96,4 @@ hi Ignore       ctermfg=darkgrey
 hi Error        cterm=bold           ctermfg=7        ctermbg=1
 
 " custom highlight modification
+hi ColorColumn  guibg=#272727        ctermbg=darkgrey

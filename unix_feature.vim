@@ -1,8 +1,8 @@
-set guifont=DejaVu\ Sans\ Mono\ 9
+set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 9
 
-if isdirectory(expand("~/Program"))
-        exec "cd ".expand("~/Program")
-endif
+"if isdirectory(expand("~/Program"))
+"    exec "cd ".expand("~/Program")
+"endif
 
 " GNOME bug
 map <F10> <C-L>
