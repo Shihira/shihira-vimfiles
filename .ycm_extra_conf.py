@@ -43,9 +43,11 @@ flags = [
 # For a C project, you would set this to 'c' instead of 'c++'.
 '-x',
 'c++',
-'-isystem',
-'/usr/include/guile/2.0'
 ]
+
+inc_path = os.environ.get("CPLUS_INCLUDE_PATH", "")
+inc_path = inc_path.split(":" if os.name == "posix" else ";")
+for p in inc_path: flags += ["-isystem", p]
 
 # Set this to the absolute path to the folder (NOT the file!) containing the
 # compile_commands.json file to use that instead of 'flags'. See here for

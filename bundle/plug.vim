@@ -19,7 +19,7 @@ Plug 'tpope/vim-dispatch',                      {'dir': d.'dispatch'}
 Plug 'KabbAmine/zeavim.vim',                    {'dir': d.'zeavim'}
 Plug 'tpope/vim-fireplace',                     {'dir': d.'fireplace'}
 Plug 'yegappan/mru'
-Plug 'shime/livedown',                          {'dir': d.'livedown'}
+Plug 'shime/vim-livedown',                      {'dir': d.'livedown'}
 Plug 'terryma/vim-multiple-cursors',            {'dir': d.'multicursor'}
 
 call plug#end()
