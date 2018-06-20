@@ -1,8 +1,5 @@
 set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 9
-
-"if isdirectory(expand("~/Program"))
-"    exec "cd ".expand("~/Program")
-"endif
+set guifontwide=SimHei\ 9
 
 " GNOME bug
 map <F10> <C-L>

@@ -1,0 +1,14 @@
+{
+    "capabilities": {
+        "textDocument": {
+            "completion": {
+                "completionItem": {
+                    "commitCharactersSupport": null,
+                    "documentationFormat": null,
+                    "snippetSupport": false
+                },
+                "dynamicRegistration": false
+            }
+        }
+    }
+}
