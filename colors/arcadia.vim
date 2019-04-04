@@ -150,10 +150,10 @@ highlight VimCommentTitle     guifg=#b2b2b2  guibg=NONE     gui=reverse    cterm
 highlight Underlined          guifg=#af005f  guibg=NONE     gui=underline  ctermfg=125    ctermbg=NONE  cterm=underline
 highlight FoldColumn          guifg=#8787af  guibg=NONE     gui=NONE       ctermfg=103    ctermbg=NONE  cterm=NONE
 highlight Todo                guifg=#5f87af  guibg=NONE     gui=reverse    ctermfg=67     ctermbg=NONE  cterm=reverse
-highlight Visual              guifg=#008787  guibg=NONE     gui=reverse    ctermfg=30     ctermbg=NONE  cterm=reverse
+highlight Visual              guifg=#008787  guibg=NONE     gui=reverse    ctermfg=10     ctermbg=NONE  cterm=reverse
 highlight Question            guifg=#dfaf00  guibg=NONE     gui=NONE       ctermfg=178    ctermbg=NONE  cterm=NONE
 highlight Search              guifg=#dfaf00  guibg=NONE     gui=reverse    ctermfg=178    ctermbg=NONE  cterm=reverse
-highlight MatchParen          guifg=#008787  guibg=NONE     gui=reverse    ctermfg=30     ctermbg=NONE  cterm=reverse
+highlight MatchParen          guifg=#008787  guibg=NONE     gui=reverse    ctermfg=10     ctermbg=NONE  cterm=NONE
 highlight Error               guifg=#d75f5f  guibg=NONE     gui=reverse    ctermfg=167    ctermbg=NONE  cterm=reverse
 highlight ErrorMsg            guifg=#d75f5f  guibg=NONE     gui=NONE       ctermfg=167    ctermbg=NONE  cterm=NONE
 highlight netrwExe            guifg=#008787  guibg=NONE     gui=NONE       ctermfg=30     ctermbg=NONE  cterm=NONE

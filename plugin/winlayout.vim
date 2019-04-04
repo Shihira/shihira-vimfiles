@@ -1,3 +1,14 @@
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" winlayout.vim
+"       WinLayout v1.0: 2018.11.9
+"
+" Author: Shihira Fung (fengzhiping@hotmail.com)
+"
+" Description: 
+"     WinLayout helps you manage your windows in a much more intuitive way
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 let s:winlayout_label_map = {}
 
 function! s:is_hsplit_line(layout, i)
@@ -95,10 +106,6 @@ function! s:find_split_line(layout, wid)
     call setwinvar(win_id2win(wid), "winlayout_label", layout[0][0])
 endfunction
 
-function! s:swap_window(nr)
-    exec a:nr . "wincmd x"
-endfunction
-
 function! s:mock_window(infodict)
     exec "buffer! " . a:infodict["bufnr"]
     for k in keys(a:infodict["variables"])
@@ -107,12 +114,16 @@ function! s:mock_window(infodict)
     "call s:swap_window(infodict["winnr"])
 endfunction
 
+" create a given layout under the current window
 function! winlayout#new_layout(layout)
     let s:winlayout_label_map = {}
-    enew
+    edit __winlayout_placeholder__
+    setlocal buftype=nofile
+    setlocal nomodifiable
     call s:find_split_line(a:layout, win_getid())
 endfunction
 
+" create a given layout globally
 function! winlayout#switch_layout(layout)
     let wininfo = getwininfo()[:]
     let old_map = s:winlayout_label_map
@@ -125,8 +136,9 @@ function! winlayout#switch_layout(layout)
 
     for wi in wininfo
         if has_key(wi["variables"], "winlayout_label")
-            call winlayout#goto_window(wi["variables"]["winlayout_label"])
-            call s:mock_window(wi)
+            if winlayout#goto_window(wi["variables"]["winlayout_label"]) != 0
+                call s:mock_window(wi)
+            endif
         endif
 
         call win_gotoid(wi["winid"])
@@ -151,7 +163,7 @@ function! winlayout#get_window_id(label)
     if has_key(s:winlayout_label_map, label)
         return s:winlayout_label_map[label]
     else
-        echomsg "Cannot find winlayout label '".label."'"
+        "echomsg "Cannot find winlayout label '".label."'"
         return 0
     endif
 endfunction
@@ -174,12 +186,12 @@ endfunction
 
 function! winlayout#get_window_width(label)
     let id = winlayout#get_window_id(a:label)
-    if id > 0 | return winwidth(win_id2win(id)) | endif
+    return id > 0 ? winwidth(win_id2win(id)) : 0
 endfunction
 
 function! winlayout#get_window_height(label)
     let id = winlayout#get_window_id(a:label)
-    if id > 0 | return winheight(win_id2win(id)) | endif
+    return id > 0 ? winheight(win_id2win(id)) : 0
 endfunction
 
 function! winlayout#get_sizes()
@@ -195,6 +207,28 @@ function! winlayout#get_sizes()
     return sizes
 endfunction
 
+function! winlayout#calculate_rules(base, rules, flags)
+    let layout = []
+    for ln in range(len(a:base))
+        let layout += [[]]
+        let l = a:base[ln]
+        for cn in range(len(l))
+            let c = a:base[ln][cn]
+            let rule = has_key(a:rules, ln.",".cn) ? a:rules[ln.",".cn] : []
+            for wn in range(len(rule))
+                let w = rule[wn]
+                if has_key(a:flags, w) && a:flags[w]
+                    let c = w
+                    break
+                endif
+            endfor
+            let layout[-1] += [c]
+        endfor
+    endfor
+
+    return layout
+endfunction
+
 function! winlayout#restore_sizes(sizes)
     for [l, w] in items(a:sizes)
         call winlayout#set_window_width(l, w[0])
@@ -202,16 +236,38 @@ function! winlayout#restore_sizes(sizes)
     endfor
 endfunction
 
-function! winlayout#eval_geometry(str, ...)
+function! winlayout#eval_geometry(str)
     let str = a:str
     let str = substitute(str, '\([a-zA-Z0-9_]\+\)\.w\s=\(.*\)', 'winlayout#set_window_width("\1", \2)', 'g')
     let str = substitute(str, '\([a-zA-Z0-9_]\+\)\.h\s=\(.*\)', 'winlayout#set_window_height("\1", \2)', 'g')
     let str = substitute(str, '\([a-zA-Z0-9_]\+\)\.w', 'winlayout#get_window_width("\1")', 'g')
     let str = substitute(str, '\([a-zA-Z0-9_]\+\)\.h', 'winlayout#get_window_height("\1")', 'g')
-    if a:0 > 0 | echo str | endif
     return eval(str)
 endfunction
 
+" @param commands: A list of commands used to open a buffer and set the cursor in the target buffer
+" @param bufexpr: name or number of the target buffer. use the current buffer if not set
+function! winlayout#open_buffer(commands, ...)
+    if a:0 >= 1
+        let bufexpr = a:1
+        if bufnr(bufexpr) >= 0
+            exec "buffer! " . bufexpr
+        else
+            for cmd in a:commands
+                exec cmd
+            endfor
+            call win_gotoid(bufwinid(bufexpr))
+        endif
+    else
+        for cmd in a:commands
+            exec cmd
+        endfor
+    endif
+endfunction
+
+" @param label: The corresponding name of window in layout table
+" @param commands: A list of commands used to open a buffer and set the cursor in the target buffer
+" @param bufexpr: name or number of the target buffer. use the current buffer if not set
 function! winlayout#assign_window_buffer(label, commands, ...)
     let old_winid = win_getid()
 
@@ -238,23 +294,5 @@ function! winlayout#assign_window_buffer(label, commands, ...)
     endif
 
     call win_gotoid(old_winid)
-endfunction
-
-function! winlayout#open_buffer(commands, ...)
-    if a:0 >= 1
-        let bufexpr = a:1
-        if bufnr(bufexpr) >= 0
-            exec "buffer! " . bufexpr
-        else
-            for cmd in a:commands
-                exec cmd
-            endfor
-            call win_gotoid(bufwinid(bufexpr))
-        endif
-    else
-        for cmd in a:commands
-            exec cmd
-        endfor
-    endif
 endfunction
 

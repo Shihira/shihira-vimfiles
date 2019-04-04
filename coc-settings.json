@@ -1,0 +1,27 @@
+{
+  "languageserver": {
+    "omnisharp": {
+      "command": "mono",
+      "args": ["/home/shihira/Software/OmniSharp/omnisharp-prebuilt/OmniSharp.exe", "-lsp"],
+      "filetypes": ["cs"],
+      "trace.server": "verbose",
+      "initializationOptions": {
+      }
+    },
+    "cquery": {
+      "command": "cquery",
+      "args": ["--log-file=/tmp/cquery.log"],
+      "filetypes": ["c", "cpp"],
+      "rootPatterns": ["compile_flags.txt", "compile_commands.json", ".vim/", ".git/", ".hg/"],
+      "initializationOptions": {
+        "cacheDirectory": "/tmp/cquery"
+      }
+    },
+    "pyls": {
+      "command": "pyls",
+      "filetypes": ["python"],
+      "initializationOptions": {
+      }
+    }
+  }
+}

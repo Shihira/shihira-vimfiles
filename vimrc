@@ -53,26 +53,33 @@ endfor
 "///////////////////////////////////////////////////////////
 "Initializing
 
-let g:my_layout = [
+let g:base_layout = [
     \ "F|00",
     \ "T|00",
     \ ]
+let g:layout_rules = {
+    \ "0,3": "10",
+    \ "1,2": "Q0",
+    \ "1,3": "Q10",
+    \ }
+let g:enabled_window = { }
+
+function! s:apply_rules()
+    let layout = winlayout#calculate_rules(g:base_layout, g:layout_rules, g:enabled_window)
+    call winlayout#switch_layout(layout)
+endfunction
 
 function! s:geometry_restriction()
     call winlayout#eval_geometry("F.w = 30")
     call winlayout#eval_geometry("F.h = (F.h + T.h) / 2")
-    if winlayout#get_window_id("Q")
-        call winlayout#eval_geometry("0.h = 0.h + Q.h - 10")
-    endif
-    if winlayout#get_window_id("1")
-        call winlayout#eval_geometry("0.w = (0.w + 1.w) / 2")
-    endif
+    call winlayout#eval_geometry("Q.h = 10")
+    call winlayout#eval_geometry("1.w = (0.w + 1.w) / 2")
 endfunction
 
 function! g:OpenMyLayout()
     let cur_buf = bufnr('%')
 
-    call winlayout#switch_layout(g:my_layout)
+    call s:apply_rules()
     call winlayout#assign_window_buffer("F", ["NERDTree"], "NERD")
     call winlayout#assign_window_buffer("T", ["Tagbar"], "Tagbar")
     call winlayout#assign_window_buffer("0", [], cur_buf)
@@ -83,37 +90,30 @@ function! g:OpenMyLayout()
 endfunction
 
 function! g:ToggleQuickfix()
-    if g:my_layout[1][2] == "Q"
-        let g:my_layout[1] = "T|".g:my_layout[0][2:]
-    else
-        let g:my_layout[1] = "T|QQ"
-    endif
+    set completeopt-=preview
 
-    call winlayout#switch_layout(g:my_layout)
+    let g:enabled_window["Q"] = !winlayout#get_window_id("Q")
+    call s:apply_rules()
     silent call s:geometry_restriction()
 endfunction
 
 function! g:ToggleDualPane()
-    if g:my_layout[0][3] == "0"
-        let g:my_layout[0] = substitute(g:my_layout[0], "00", "01", "")
-        let g:my_layout[1] = substitute(g:my_layout[1], "00", "01", "")
-    else
-        let g:my_layout[0] = substitute(g:my_layout[0], "01", "00", "")
-        let g:my_layout[1] = substitute(g:my_layout[1], "01", "00", "")
-    endif
-
-    call winlayout#switch_layout(g:my_layout)
+    let g:enabled_window["1"] = !winlayout#get_window_id("1")
+    call s:apply_rules()
     silent call s:geometry_restriction()
 endfunction
 
 function! g:SwitchQuickfix()
+    set completeopt-=preview
+
     let sel = input("[q] Quickfix\n[t] Terminal\n[p] Preview\n\nChoose a functionality: ")
     if sel =~ '^[qQ]'
         call winlayout#assign_window_buffer("Q", ["copen"], "Quickfix")
     elseif sel =~ '^[tT]'
         call winlayout#assign_window_buffer("Q", ["terminal ++noclose"], "!/bin/zsh")
     elseif sel =~ '^[pP]'
-        call winlayout#assign_window_buffer("Q", ["enew", "let &pvw = 1"])
+        call winlayout#assign_window_buffer("Q", ["let &pvw = 1"])
+        set completeopt+=preview
     else
         call winlayout#assign_window_buffer("Q", [sel])
     endif
@@ -145,8 +145,8 @@ nmap <C-B><C-S> %v%s<Space><Esc>:call RotateParentheses()<CR>vp
 noremap <Esc> :nohl\|set nocul<CR><Esc>
 nmap <C-T> :call g:GotoWindowId(1)<CR>
 nmap <C-E> :call g:GotoWindowId(2)<CR>
-command OpenMyLayout call g:OpenMyLayout()
-command -nargs=1 Recode e ++enc=<args>
+command! OpenMyLayout call g:OpenMyLayout()
+command! -nargs=1 Recode e ++enc=<args>
 nmap mM :OpenMyLayout<CR>
 nmap mD :call g:ShowGoTo("Definition", 5)<CR>
 nmap mC :call g:ShowGoTo("Declaration", 5)<CR>
