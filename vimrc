@@ -50,81 +50,8 @@ for path in split(globpath($VIMFILES, 'bundle/**.vim'), "\n")
         exec "source " . path
 endfor
 
-"///////////////////////////////////////////////////////////
-"Initializing
-
-let g:base_layout = [
-    \ "F|00",
-    \ "T|00",
-    \ ]
-let g:layout_rules = {
-    \ "0,3": "10",
-    \ "1,2": "Q0",
-    \ "1,3": "Q10",
-    \ }
-let g:enabled_window = { }
-
-function! s:apply_rules()
-    let layout = winlayout#calculate_rules(g:base_layout, g:layout_rules, g:enabled_window)
-    call winlayout#switch_layout(layout)
-endfunction
-
-function! s:geometry_restriction()
-    call winlayout#eval_geometry("F.w = 30")
-    call winlayout#eval_geometry("F.h = (F.h + T.h) / 2")
-    call winlayout#eval_geometry("Q.h = 10")
-    call winlayout#eval_geometry("1.w = (0.w + 1.w) / 2")
-endfunction
-
-function! g:OpenMyLayout()
-    let cur_buf = bufnr('%')
-
-    call s:apply_rules()
-    call winlayout#assign_window_buffer("F", ["NERDTree"], "NERD")
-    call winlayout#assign_window_buffer("T", ["Tagbar"], "Tagbar")
-    call winlayout#assign_window_buffer("0", [], cur_buf)
-    silent call s:geometry_restriction()
-
-    call winlayout#goto_window("0")
-    exec "buffer " . cur_buf
-endfunction
-
-function! g:ToggleQuickfix()
-    set completeopt-=preview
-
-    let g:enabled_window["Q"] = !winlayout#get_window_id("Q")
-    call s:apply_rules()
-    silent call s:geometry_restriction()
-endfunction
-
-function! g:ToggleDualPane()
-    let g:enabled_window["1"] = !winlayout#get_window_id("1")
-    call s:apply_rules()
-    silent call s:geometry_restriction()
-endfunction
-
-function! g:SwitchQuickfix()
-    set completeopt-=preview
-
-    let sel = input("[q] Quickfix\n[t] Terminal\n[p] Preview\n\nChoose a functionality: ")
-    if sel =~ '^[qQ]'
-        call winlayout#assign_window_buffer("Q", ["copen"], "Quickfix")
-    elseif sel =~ '^[tT]'
-        call winlayout#assign_window_buffer("Q", ["terminal ++noclose"], "!/bin/zsh")
-    elseif sel =~ '^[pP]'
-        call winlayout#assign_window_buffer("Q", ["let &pvw = 1"])
-        set completeopt+=preview
-    else
-        call winlayout#assign_window_buffer("Q", [sel])
-    endif
-endfunction
-
-nnoremap <F3> :call g:ToggleDualPane()<CR>
-nnoremap <F4> :call g:ToggleQuickfix()<CR>
-nnoremap <S-F4> :call g:SwitchQuickfix()<CR>
-
 "//////////////////////////////////////////////////////////
-"MAPPING
+" MAPPING
 
 nnoremap <A-w> <C-w>
 nnoremap <A-]> <C-]>
@@ -138,13 +65,14 @@ nmap <A-j> <C-d>
 nmap <A-k> <C-u>
 nmap j gj
 nmap k gk
+nmap cd :cd %:p:h<CR>
 imap <BS> <Left><Del>
 "imap <C-Tab> <Esc><Tab>
-nmap <Tab> :call SwitchInputWindow(4, 5)<CR>
-nmap <C-B><C-S> %v%s<Space><Esc>:call RotateParentheses()<CR>vp
-noremap <Esc> :nohl\|set nocul<CR><Esc>
-nmap <C-T> :call g:GotoWindowId(1)<CR>
-nmap <C-E> :call g:GotoWindowId(2)<CR>
+nnoremap <Tab> :call g:SwitchFileWindows()<CR>
+nnoremap <F3> :call g:ToggleDualPane()<CR>
+nnoremap <F4> :call g:ToggleQuickfix()<CR>
+nnoremap <S-F4> :call g:SwitchQuickfix()<CR>
+nnoremap / :nohl\|set nocul<CR>/
 command! OpenMyLayout call g:OpenMyLayout()
 command! -nargs=1 Recode e ++enc=<args>
 nmap mM :OpenMyLayout<CR>
