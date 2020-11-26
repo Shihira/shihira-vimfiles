@@ -8,14 +8,10 @@
       "initializationOptions": {
       }
     },
-    "cquery": {
-      "command": "cquery",
-      "args": ["--log-file=/tmp/cquery.log"],
-      "filetypes": ["c", "cpp"],
-      "rootPatterns": ["compile_flags.txt", "compile_commands.json", ".vim/", ".git/", ".hg/"],
-      "initializationOptions": {
-        "cacheDirectory": "/tmp/cquery"
-      }
+    "clangd": {
+      "command": "D:/Programma/LLVM/bin/clangd.exe",
+      "filetypes": ["c", "cpp", "cuda", "objc", "objcpp"],
+      "rootPatterns": [".svn", "compile_commands.json"]
     },
     "pyls": {
       "command": "pyls",
@@ -23,5 +19,9 @@
       "initializationOptions": {
       }
     }
-  }
+  },
+  "list.source.files.excludePatterns": [
+      "build",
+      "artifacts"
+  ]
 }

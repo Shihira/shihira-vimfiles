@@ -31,7 +31,7 @@ let &fillchars="vert: "
 
 filetype plugin indent on
 au FileType html setl sw=2 sts=2 et
-au BufRead,BufNewFile *.cl setl filetype=opencl
+au BufRead,BufNewFile *.cl *.cginc *.hlsl *.shader setl filetype=opencl
 au BufRead,BufNewFile *.md setl wrap
 
 "//////////////////////////////////////////////////////////
@@ -68,7 +68,7 @@ nmap k gk
 nmap cd :cd %:p:h<CR>
 imap <BS> <Left><Del>
 "imap <C-Tab> <Esc><Tab>
-nnoremap <Tab> :call g:SwitchFileWindows()<CR>
+nnoremap <Tab><Tab> :call g:SwitchFileWindows()<CR>
 nnoremap <F3> :call g:ToggleDualPane()<CR>
 nnoremap <F4> :call g:ToggleQuickfix()<CR>
 nnoremap <S-F4> :call g:SwitchQuickfix()<CR>
