@@ -27,8 +27,13 @@ endfunction
 
 let g:coc_snippet_next = '<tab>'
 
-nmap <Leader>s :CocList -I symbols<CR>
 nmap <Leader>f :CocList files<CR>
+nmap <Leader>m :CocList mru<CR>
+nmap <Leader>s :CocList -I symbols<CR>
+nmap <Leader>g :<C-u>execute 'CocList --input='.substitute(input("Grep: "), " ", "\\ ", "").' grep'<CR>
+vmap <Leader>s :<C-u>execute 'CocList -I --input='.g:GetSelectedText().' symbols'<CR>
+vmap <Leader>g :<C-u>execute 'CocList --input='.g:GetSelectedText().' grep'<CR>
 autocmd FileType cpp nmap <buffer> <F12> :call CocActionAsync('jumpDefinition')<CR>
+autocmd FileType cpp nmap <buffer> <S-F12> :call CocActionAsync('jumpReferences')<CR>
 autocmd FileType cpp nmap <buffer> <C-H> :call <SID>SwitchSourceHeader()<CR>
 autocmd FileType cpp nmap <buffer> <F1> :call CocActionAsync('doHover')<CR>

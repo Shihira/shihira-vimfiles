@@ -1,27 +1,32 @@
 {
-  "languageserver": {
-    "omnisharp": {
-      "command": "mono",
-      "args": ["/home/shihira/Software/OmniSharp/omnisharp-prebuilt/OmniSharp.exe", "-lsp"],
-      "filetypes": ["cs"],
-      "trace.server": "verbose",
-      "initializationOptions": {
-      }
+    "languageserver": {
+        "clangd": {
+            "command": "clangd",
+            "filetypes": ["c", "cpp", "cuda", "objc", "objcpp"],
+            "rootPatterns": ["compile_commands.json"]
+        },
+        "pyls": {
+            "command": "pyls",
+            "filetypes": ["python"],
+            "initializationOptions": {
+            }
+        },
+        "rls": {
+            "command": "rust-analyzer",
+            "filetypes": ["rust"],
+            "rootPatterns": ["Cargo.toml"]
+        }
     },
-    "clangd": {
-      "command": "D:/Programma/LLVM/bin/clangd.exe",
-      "filetypes": ["c", "cpp", "cuda", "objc", "objcpp"],
-      "rootPatterns": [".svn", "compile_commands.json"]
-    },
-    "pyls": {
-      "command": "pyls",
-      "filetypes": ["python"],
-      "initializationOptions": {
-      }
+    "list.source.files": {
+        "excludePatterns": [
+        ],
+        "command": "rg",
+        "args": [
+            "--follow",
+            "--color", "never",
+            "--files",
+
+            "--glob", "!*.meta"
+        ]
     }
-  },
-  "list.source.files.excludePatterns": [
-      "build",
-      "artifacts"
-  ]
 }

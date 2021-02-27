@@ -38,11 +38,14 @@ function! g:OpenMyLayout()
 endfunction
 
 function! g:ToggleQuickfix()
-    set completeopt-=preview
-
-    let g:enabled_window["Q"] = !winlayout#get_window_id("Q")
-    call s:apply_rules()
-    silent call s:geometry_restriction()
+    let qfwin = win_id2win(getqflist({'winid': 0})['winid'])
+    if winnr() != qfwin
+        botright cwindow
+        let qfwin = win_id2win(getqflist({'winid': 0})['winid'])
+        execute qfwin."wincmd w"
+    else
+        cclose
+    end
 endfunction
 
 function! g:ToggleDualPane()
@@ -52,19 +55,6 @@ function! g:ToggleDualPane()
 endfunction
 
 function! g:SwitchQuickfix()
-    set completeopt-=preview
-
-    let sel = input("[q] Quickfix\n[t] Terminal\n[p] Preview\n\nChoose a functionality: ")
-    if sel =~ '^[qQ]'
-        call winlayout#assign_window_buffer("Q", ["copen"], "Quickfix")
-    elseif sel =~ '^[tT]'
-        call winlayout#assign_window_buffer("Q", ["terminal ++noclose"], "!/bin/zsh")
-    elseif sel =~ '^[pP]'
-        call winlayout#assign_window_buffer("Q", ["let &pvw = 1"])
-        set completeopt+=preview
-    else
-        call winlayout#assign_window_buffer("Q", [sel])
-    endif
 endfunction
 
 function! g:SwitchFileWindows()
@@ -83,4 +73,20 @@ function! g:CommentOut() range
     exec "normal \<c-v>"
     exec "normal " . a:lastline . "G^"
     exec "normal I" . input("Comment with: ", "// ")
+endfunction
+
+function! g:GetSelectedText() range
+    let old_content = @@
+    if visualmode() ==# 'v'
+        normal! `<v`>y
+    elseif visualmode() ==# 'char'
+        normal! `[v`]y
+    else
+        return ""
+    endif
+
+    let new_content = @@
+    let @@ = old_content
+
+    return new_content
 endfunction

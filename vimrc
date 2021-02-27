@@ -24,15 +24,20 @@ set rtp+=$VIMFILES
 set winaltkeys=no
 set laststatus=2
 set makeprg=make
+set wildmode=list:longest,full
 if has('pythonx') | set pyxversion=3 | endif
-let &colorcolumn=join(range(81,999),",")
-let &fillchars="vert: "
+"let &colorcolumn=join(range(81,999),",")
+"let &fillchars="vert: "
 
 
 filetype plugin indent on
 au FileType html setl sw=2 sts=2 et
 au BufRead,BufNewFile *.cl *.cginc *.hlsl *.shader setl filetype=opencl
 au BufRead,BufNewFile *.md setl wrap
+au BufNewFile,BufRead *.cg,*.cginc set filetype=cg
+au BufNewFile,BufRead *.hlsl,*.hlslc,*.hlslh,*.hlsl set filetype=hlsl
+au BufNewFile,BufRead *.glsl,*.geom,*.vert,*.frag,*.gsh,*.vsh,*.fsh,*.vs,*.fs set filetype=glsl
+au BufNewFile,BufRead *.shader set filetype=shaderlab
 
 "//////////////////////////////////////////////////////////
 "Platform detection and settings
@@ -54,9 +59,9 @@ endfor
 " MAPPING
 
 nnoremap <A-w> <C-w>
-nnoremap <A-]> <C-]>
-nnoremap <A-t> <C-t>
-inoremap <A-f> <Esc>
+nnoremap <A-]> <F12>
+nnoremap <A-i> <C-i>
+nnoremap <A-o> <C-o>
 inoremap <A-j> <C-n>
 inoremap <A-k> <C-p>
 inoremap <expr> <Down> pumvisible() ? "\<C-n>" : "\<Down>"
@@ -65,7 +70,7 @@ nmap <A-j> <C-d>
 nmap <A-k> <C-u>
 nmap j gj
 nmap k gk
-nmap cd :cd %:p:h<CR>
+"nmap cd :cd %:p:h<CR>
 imap <BS> <Left><Del>
 "imap <C-Tab> <Esc><Tab>
 nnoremap <Tab><Tab> :call g:SwitchFileWindows()<CR>
