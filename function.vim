@@ -57,6 +57,9 @@ endfunction
 function! g:SwitchQuickfix()
 endfunction
 
+"///////////////////////////////////////////////////////////
+" FUNCTIONALITIES
+
 function! g:SwitchFileWindows()
     let init_winnr = winnr()
     wincmd w
@@ -64,9 +67,6 @@ function! g:SwitchFileWindows()
         wincmd w
     endwhile
 endfunction
-
-"///////////////////////////////////////////////////////////
-" FUNCTIONALITIES
 
 function! g:CommentOut() range
     exec "normal " . a:firstline . "G^"
@@ -89,4 +89,13 @@ function! g:GetSelectedText() range
     let @@ = old_content
 
     return new_content
+endfunction
+
+function! g:GotoStack()
+    execute "normal $"
+    let fn = split(expand("<cWORD>"), ":")
+    execute "normal 0"
+    g:SwitchFileWindows()
+    execute "e ".fn[0]
+    execute fn[1]
 endfunction

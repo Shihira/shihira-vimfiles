@@ -15,6 +15,12 @@
             "command": "rust-analyzer",
             "filetypes": ["rust"],
             "rootPatterns": ["Cargo.toml"]
+        },
+        "cmake": {
+            "command": "cmake-language-server",
+            "filetypes": ["cmake"],
+            "rootPatterns": [ "build/" ],
+            "initializationOptions": { "buildDirectory": "build" }
         }
     },
     "list.source.files": {

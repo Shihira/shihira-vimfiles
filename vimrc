@@ -35,7 +35,7 @@ au FileType html setl sw=2 sts=2 et
 au BufRead,BufNewFile *.cl *.cginc *.hlsl *.shader setl filetype=opencl
 au BufRead,BufNewFile *.md setl wrap
 au BufNewFile,BufRead *.cg,*.cginc set filetype=cg
-au BufNewFile,BufRead *.hlsl,*.hlslc,*.hlslh,*.hlsl set filetype=hlsl
+au BufNewFile,BufRead *.hlsl,*.hlslc,*.hlslh,*.hlsl,*.compute set filetype=hlsl
 au BufNewFile,BufRead *.glsl,*.geom,*.vert,*.frag,*.gsh,*.vsh,*.fsh,*.vs,*.fs set filetype=glsl
 au BufNewFile,BufRead *.shader set filetype=shaderlab
 
