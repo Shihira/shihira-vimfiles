@@ -1,4 +1,4 @@
-﻿" Vim syntax file the High Level Shader Language
+" Vim syntax file the High Level Shader Language
 " Language:     HLSL (DirectX 11)
 " Author:       Marc Costa <beyond.marc@gmail.com>
 " Date:         December 29, 2012

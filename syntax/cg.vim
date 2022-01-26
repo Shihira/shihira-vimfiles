@@ -1,4 +1,4 @@
-﻿" Vim syntax file
+" Vim syntax file
 " Language:	Cg
 " Maintainer:	Kevin Bjorke <kbjorke@nvidia.com>
 " Last change:	$Date$

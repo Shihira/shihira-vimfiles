@@ -1,4 +1,4 @@
-﻿" Vim syntax file
+" Vim syntax file
 " Language:	UnityShader
 " Maintainer:	ChangJie.Qiu <qiuchangjie@foxmail.com>
 " Last Change:	2015-06-27
