@@ -26,18 +26,20 @@ set laststatus=2
 set makeprg=make
 set wildmode=list:longest,full
 if has('pythonx') | set pyxversion=3 | endif
+if has("gui_running") | set lines=70 columns=250 | endif
 "let &colorcolumn=join(range(81,999),",")
 "let &fillchars="vert: "
 
 
 filetype plugin indent on
 au FileType html setl sw=2 sts=2 et
-au BufRead,BufNewFile *.cl *.cginc *.hlsl *.shader setl filetype=opencl
+au BufRead,BufNewFile *.cl,*.cginc,*.hlsl,*.shader setl filetype=opencl
 au BufRead,BufNewFile *.md setl wrap
 au BufNewFile,BufRead *.cg,*.cginc set filetype=cg
-au BufNewFile,BufRead *.hlsl,*.hlslc,*.hlslh,*.hlsl,*.compute set filetype=hlsl
+au BufNewFile,BufRead *.hlsl,*.hlslc,*.hlslh,*.hlsl,*.compute,*.usf,*.ush set filetype=hlsl
 au BufNewFile,BufRead *.glsl,*.geom,*.vert,*.frag,*.gsh,*.vsh,*.fsh,*.vs,*.fs set filetype=glsl
 au BufNewFile,BufRead *.shader set filetype=shaderlab
+au BufNewFile,BufRead */Trunk/* setl noexpandtab
 
 "//////////////////////////////////////////////////////////
 "Platform detection and settings
@@ -74,15 +76,9 @@ nmap k gk
 imap <BS> <Left><Del>
 "imap <C-Tab> <Esc><Tab>
 nnoremap <Tab><Tab> :call g:SwitchFileWindows()<CR>
-nnoremap <F3> :call g:ToggleDualPane()<CR>
-nnoremap <F4> :call g:ToggleQuickfix()<CR>
-nnoremap <S-F4> :call g:SwitchQuickfix()<CR>
+nnoremap <C-L> <C-I>
 nnoremap / :nohl\|set nocul<CR>/
-command! OpenMyLayout call g:OpenMyLayout()
 command! -nargs=1 Recode e ++enc=<args>
-nmap mM :OpenMyLayout<CR>
-nmap mD :call g:ShowGoTo("Definition", 5)<CR>
-nmap mC :call g:ShowGoTo("Declaration", 5)<CR>
 
 colorscheme arcadia
 syntax enable
