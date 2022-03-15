@@ -40,6 +40,8 @@ au BufNewFile,BufRead *.hlsl,*.hlslc,*.hlslh,*.hlsl,*.compute,*.usf,*.ush set fi
 au BufNewFile,BufRead *.glsl,*.geom,*.vert,*.frag,*.gsh,*.vsh,*.fsh,*.vs,*.fs set filetype=glsl
 au BufNewFile,BufRead *.shader set filetype=shaderlab
 au BufNewFile,BufRead */Trunk/* setl noexpandtab
+au TabEnter silent! execute "cd ".w:cwd
+au TabLeave let w:cwd = getcwd()
 
 "//////////////////////////////////////////////////////////
 "Platform detection and settings
@@ -78,7 +80,12 @@ imap <BS> <Left><Del>
 nnoremap <Tab><Tab> :call g:SwitchFileWindows()<CR>
 nnoremap <C-L> <C-I>
 nnoremap / :nohl\|set nocul<CR>/
+nmap <C-Tab> :tabn<CR>
+nmap <C-S-Tab> :tabp<CR>
+
 command! -nargs=1 Recode e ++enc=<args>
+command! CopyPath let @+ = substitute(expand("%"), "\\", "/", "g")
+command! CopyAbsPath let @+ = substitute(expand("%:p"), "\\", "/", "g")
 
 colorscheme arcadia
 syntax enable

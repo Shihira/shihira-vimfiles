@@ -6,7 +6,7 @@
             "rootPatterns": ["compile_commands.json"]
         },
         "pyls": {
-            "command": "pyls",
+            "command": "pylsp",
             "filetypes": ["python"],
             "initializationOptions": {
             }
@@ -32,7 +32,31 @@
             "--color", "never",
             "--files",
 
-            "--glob", "!*.meta"
+            "--glob", "*.cpp",
+            "--glob", "*.h",
+            "--glob", "*.ush",
+            "--glob", "*.usf",
+            "--glob", "!*Engine/Source/ThirdParty/*",
+            "--glob", "!*Saved/*",
+            "--glob", "!*Templates/*"
+        ]
+    },
+    "list.source.grep": {
+        "excludePatterns": [
+        ],
+        "command": "rg",
+        "args": [
+            "--follow",
+            "--color", "never",
+
+            "--glob", "*.cpp",
+            "--glob", "*.h",
+            "--glob", "*.ush",
+            "--glob", "*.usf",
+            "--glob", "!*Engine/Source/ThirdParty/*",
+            "--glob", "!*Saved/*",
+            "--glob", "!*Templates/*"
         ]
     }
 }
+
