@@ -9,6 +9,8 @@ function! s:check_back_space() abort
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
+" @bind-key: <C-H>
+" @bind-menu: COC.Switch\ Source\ Header
 function! s:SwitchSourceHeader()
     let l:cur_file = expand("%:p")
 
@@ -64,16 +66,50 @@ endfunction
 
 let g:coc_snippet_next = '<tab>'
 
-nmap <Leader>f :CocList --number-select files<CR>
-nmap <Leader>m :CocList --number-select mru<CR>
-nmap <Leader>s :CocList --number-select -I symbols<CR>
-nmap <Leader>o :CocList --number-select outline methods<CR>
-nmap <Leader>l :CocListResume<CR>
+" @bind-menu: COC.Options.coc_list_grep_options
+" @tips: -e(regex) -S(smartcase) -l(literal) -w(word)
+let g:coc_list_grep_options = "-e -S"
+" @bind-menu: COC.Options.coc_list_grep_wrap_word
+let g:coc_list_grep_wrap_word = 1
 
-nmap <Leader>g :<C-u>execute 'CocList --number-select --input='.substitute(input("Grep: "), " ", "\\ ", "").' grep'<CR>
-vmap <Leader>s :<C-u>execute 'CocList --number-select -I --input='.g:GetSelectedText().' symbols'<CR>
-vmap <Leader>g :<C-u>execute 'CocList --number-select --input='.g:GetSelectedText().' grep'<CR>
+function s:execute_coc_list(lst, w = '')
+    let w = a:w
+
+    if w == '<selected>'
+        let w = function#get_selected_text()
+    endif
+
+    if w != ''
+        let w = substitute(w, ' ', '\ ', 'g')
+        if g:coc_list_grep_wrap_word
+            let w = '\w'.w.'\w'
+        endif
+        let w = '--input='.w
+    endif
+
+    execute printf('CocList --number-select %s %s %s',
+                \ (a:lst == 'grep' || a:lst == 'symbols' ? '-I' : ''),
+                \ w,
+                \ a:lst.(a:lst == 'grep' ? ' '.g:coc_list_grep_options : ''))
+endfunction
+
+nmap <Leader>l :CocListResume<CR>
+" @bind-menu: COC.List.files
+nmap <Leader>f :call <SID>execute_coc_list("files")<CR>
+" @bind-menu: COC.List.mru
+nmap <Leader>m :call <SID>execute_coc_list("mru")<CR>
+" @bind-menu: COC.List.symbols
+nmap <Leader>s :call <SID>execute_coc_list("symbols")<CR>
+" @bind-menu: COC.List.outline\ methods
+nmap <Leader>o :call <SID>execute_coc_list("outline methods")<CR>
+" @bind-menu: COC.List.grep
+nmap <Leader>g :call <SID>execute_coc_list("grep", input("Grep: "))<CR>
+
+vmap <Leader>s :call <SID>execute_coc_list("symbols", "<selected>")<CR>
+vmap <Leader>g :call <SID>execute_coc_list("grep", "<selected>")<CR>
+
 autocmd FileType cpp nmap <buffer> <F12> :call CocActionAsync('jumpDefinition')<CR>
 autocmd FileType cpp nmap <buffer> <S-F12> :call CocActionAsync('jumpReferences')<CR>
-autocmd FileType cpp nmap <buffer> <C-H> :call <SID>SwitchSourceHeader()<CR>
 autocmd FileType cpp nmap <buffer> <F1> :call CocActionAsync('doHover')<CR>
+
+call function#process_script(expand('<sfile>'), expand('<SID>'))

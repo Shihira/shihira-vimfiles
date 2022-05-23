@@ -2,6 +2,7 @@
     "languageserver": {
         "clangd": {
             "command": "clangd",
+            "args": ["-log=verbose"],
             "filetypes": ["c", "cpp", "cuda", "objc", "objcpp"],
             "rootPatterns": ["compile_commands.json"]
         },
@@ -34,6 +35,7 @@
 
             "--glob", "*.cpp",
             "--glob", "*.h",
+            "--glob", "*.cs",
             "--glob", "*.ush",
             "--glob", "*.usf",
             "--glob", "!*Engine/Source/ThirdParty/*",
@@ -51,6 +53,7 @@
 
             "--glob", "*.cpp",
             "--glob", "*.h",
+            "--glob", "*.cs",
             "--glob", "*.ush",
             "--glob", "*.usf",
             "--glob", "!*Engine/Source/ThirdParty/*",
