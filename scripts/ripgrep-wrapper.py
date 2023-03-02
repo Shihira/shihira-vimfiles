@@ -25,9 +25,9 @@ with log_file.open('wb') as log:
         log.flush()
 
         sys.stdout.buffer.write(stdout)
-        log.stdout.flush()
+        log.flush()
         sys.stderr.buffer.write(stderr)
-        log.stderr.flush()
+        log.flush()
 
     future.wait()
 

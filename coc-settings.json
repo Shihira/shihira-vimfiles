@@ -2,14 +2,21 @@
     "languageserver": {
         "clangd": {
             "command": "clangd",
-            "args": ["-log=verbose"],
+            "args": ["-log=verbose", "--header-insertion=never"],
             "filetypes": ["c", "cpp", "cuda", "objc", "objcpp"],
             "rootPatterns": ["compile_commands.json"]
         },
         "pyls": {
+            "command": "pyls",
+            "filetypes": ["python"],
+            "settings": {
+            }
+        },
+        "pylsp": {
             "command": "pylsp",
             "filetypes": ["python"],
-            "initializationOptions": {
+            "settings": {
+                "pylsp.plugins.pycodestyle.ignore": ["E501", "E302", "E305", "W391"]
             }
         },
         "rls": {
@@ -24,42 +31,14 @@
             "initializationOptions": { "buildDirectory": "build" }
         }
     },
-    "list.source.files": {
-        "excludePatterns": [
-        ],
-        "command": "rg",
-        "args": [
-            "--follow",
-            "--color", "never",
-            "--files",
-
-            "--glob", "*.cpp",
-            "--glob", "*.h",
-            "--glob", "*.cs",
-            "--glob", "*.ush",
-            "--glob", "*.usf",
-            "--glob", "!*Engine/Source/ThirdParty/*",
-            "--glob", "!*Saved/*",
-            "--glob", "!*Templates/*"
-        ]
+    "suggest": {
+        "timeout": 30000,
+        "snippetsSupport": false
     },
-    "list.source.grep": {
-        "excludePatterns": [
-        ],
-        "command": "rg",
-        "args": [
-            "--follow",
-            "--color", "never",
-
-            "--glob", "*.cpp",
-            "--glob", "*.h",
-            "--glob", "*.cs",
-            "--glob", "*.ush",
-            "--glob", "*.usf",
-            "--glob", "!*Engine/Source/ThirdParty/*",
-            "--glob", "!*Saved/*",
-            "--glob", "!*Templates/*"
-        ]
+    "list": {
+        "source": {
+            "mru.excludePatterns": ["**\\AppData\\Local\\Temp\\*"]
+        }
     }
 }
 

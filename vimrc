@@ -28,7 +28,10 @@ set wildmode=list:longest,full
 set viewoptions=
 set sessionoptions=winsize,winpos,tabpages
 if has('pythonx') | set pyxversion=3 | endif
-if has("gui_running") | set lines=60 columns=250 | endif
+if has("gui_running") && !exists('g:vimrc_done')
+    set lines=60 columns=250
+endif
+
 "let &colorcolumn=join(range(81,999),",")
 "let &fillchars="vert: "
 
@@ -43,8 +46,8 @@ au BufNewFile,BufRead *.hlsl,*.hlslc,*.hlslh,*.hlsl,*.compute,*.usf,*.ush set fi
 au BufNewFile,BufRead *.glsl,*.geom,*.vert,*.frag,*.gsh,*.vsh,*.fsh,*.vs,*.fs set filetype=glsl
 au BufNewFile,BufRead *.shader set filetype=shaderlab
 au BufNewFile,BufRead */Trunk/* setl noexpandtab
-au TabEnter * silent! execute "cd ".w:cwd
-au TabLeave * let w:cwd = getcwd()
+au TabEnter * silent! execute "cd ".t:cwd
+au TabLeave * let t:cwd = getcwd()
 
 "//////////////////////////////////////////////////////////
 "Platform detection and settings
@@ -52,6 +55,7 @@ au TabLeave * let w:cwd = getcwd()
 exec "source $VIMFILES/".(
             \ has("win32") ? "win32" :
             \ has("mac") ? "mac" :
+            \ has("ios") ? "ios" :
             \ "unix")."_feature.vim"
 
 for path in split(globpath($VIMFILES, 'bundle/**.vim'), "\n")
@@ -65,8 +69,8 @@ nnoremap <A-w> <C-w>
 nnoremap <A-]> <F12>
 nnoremap <A-i> <C-i>
 nnoremap <A-o> <C-o>
-inoremap <A-j> <C-n>
-inoremap <A-k> <C-p>
+"inoremap <A-j> <Down>
+"inoremap <A-k> <Up>
 inoremap <expr> <Down> pumvisible() ? "\<C-n>" : "\<Down>"
 inoremap <expr> <Up> pumvisible() ? "\<C-p>" : "\<Up>"
 nmap <A-j> <C-d>
@@ -78,9 +82,13 @@ imap <BS> <Left><Del>
 nnoremap / :nohl\|set nocul<CR>/
 nmap <C-Tab> :tabn<CR>
 nmap <C-S-Tab> :tabp<CR>
-imap <C-S-V> <C-R>+
+imap <C-S-V> <C-O>"+P
 cmap <C-S-V> <C-R>+
 vmap <C-S-C> "+y
+nmap <C-h> <C-w>h
+nmap <C-j> <C-w>j
+nmap <C-k> <C-w>k
+nmap <C-l> <C-w>l
 
 command! -nargs=1 Recode e ++enc=<args>
 
@@ -90,16 +98,6 @@ syntax on
 
 "//////////////////////////////////////////////////////////
 " FUNCTIONALITIES
-
-" @bind-key: <Space><Space>
-" @bind-menu: Shihira.Switch\ File\ Windows
-function! s:switch_file_windows()
-    let init_winnr = winnr()
-    wincmd w
-    while !&modifiable && winnr() != init_winnr
-        wincmd w
-    endwhile
-endfunction
 
 " @bind-menu: Shihira.Comment\ Block
 function! s:comment_block() range
@@ -134,6 +132,14 @@ function! s:copy_abs_path()
     let @+ = substitute(expand("%:p"), "\\", "/", "g")
 endfunction
 
+" @bind-command: CopyDepotPath
+" @bind-menu: Shihira.Copy\ Perforce\ Depot\ Path
+function! s:copy_depot_path()
+    let depot_path = split(system("p4 where ".expand("%:p")))[0]
+    echo depot_path
+    let @+ = depot_path
+endfunction
+
 " @bind-menu
 let g:function_cd_patterns = '.vim:.git:README.*'
 
@@ -145,7 +151,10 @@ function! s:ask_for_cd()
     let cd_list = filter(cd_list, printf("v:val != '%s'", cwd))
 
     if len(cd_list) > 1
-        let input_index = inputlist(["Candidate paths:"] + map(cd_list, '(v:key + 1).". ".v:val'))
+        let input_list = ["Candidate paths:"]
+        for i in range(len(cd_list)) | let input_list += [(i+1).". ".cd_list[i]] | endfor
+
+        let input_index = inputlist(input_list)
         if input_index > 0
             execute 'cd '.cd_list[input_index - 1]
         endif
@@ -155,5 +164,28 @@ function! s:ask_for_cd()
     endif
 endfunction
 
+" @bind-menu: Shihira.Save\ Session
+function! s:save_session()
+    mksession! ~/session.vim
+
+    let sessionx_lines = []
+    for i in range(1, tabpagenr('$'))
+        let tab_cwd = gettabvar(i, "cwd")
+        if tab_cwd != ""
+            call add(sessionx_lines, printf('call settabvar(%d, "cwd", "%s")', i, escape(tab_cwd, '\')))
+        endif
+    endfor
+    call add(sessionx_lines, 'exec "cd ".t:cwd')
+
+    call writefile(sessionx_lines, expand("~/sessionx.vim"))
+endfunction
+" @bind-menu: Shihira.Restore\ Session
+function! s:restore_session()
+    source ~/session.vim
+endfunction
+
 call function#process_script(expand('<sfile>'), expand('<SID>'))
 
+call bundle#coc#register_menu_to_coc()
+
+let g:vimrc_done = 1

@@ -1,6 +1,8 @@
 " @bind-menu
 let g:function_annotation_debug = 0
 
+let g:function#registered_menu_entries = {}
+
 function! function#get_selected_text() range
     let old_content = @@
     if visualmode() ==# 'v'
@@ -84,12 +86,16 @@ function! function#process_script_variable(annotations)
             let menu_name = "Shihira.Options.".var_name
         endif
 
-        let cmd = printf('nmenu %s :call function#ask_for_option("%s", "%s", "%s", %s)<CR>',
-                    \ menu_name,
+        let func_name = printf('function#ask_for_option("%s", "%s", "%s", %s)',
                     \ var_name,
                     \ typename(g:[var_name]),
                     \ get(a:annotations, 'tips', ''),
                     \ split(get(a:annotations, 'options', ''), '|'))
+        let cmd = printf('nmenu %s :call %s<CR>',
+                    \ menu_name,
+                    \ func_name)
+
+        let g:function#registered_menu_entries[menu_name] = func_name
         if g:function_annotation_debug | echo cmd | endif
         execute cmd
     endif
@@ -123,9 +129,11 @@ function! function#process_script_function(annotations, sid)
 
     if has_key(a:annotations, "bind-menu")
         let cmd = printf("%smenu %s :call %s<CR>",
-                    \ get(a:annotations, 'bind-menu-prefix', 'n'),
+                    \ get(a:annotations, 'bind-menu-prefix', 'a'),
                     \ a:annotations["bind-menu"],
                     \ func_name)
+
+        let g:function#registered_menu_entries[a:annotations["bind-menu"]] = func_name
         if g:function_annotation_debug | echo cmd | endif
         execute cmd
     endif
@@ -134,6 +142,9 @@ function! function#process_script_function(annotations, sid)
 endfunction
 
 function! function#process_script(fname, sid, phase = "initial")
+    if v:version < 800 | return | endif
+    if !has('gui') | return | endif
+    if has('ios') | return | endif
     let lines = readfile(a:fname)
 
     let annotations = {}
