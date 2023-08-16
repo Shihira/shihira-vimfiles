@@ -80,7 +80,7 @@ let g:coc_list_debug = 0
 let g:coc_list_rg_glob = {}
 " @bind-menu: COC.Options.coc_list_rg_glob
 " @tips: $ext (%:p:e, eg. json)
-let g:coc_list_rg_glob = '*.$ext:*.c:*.cc:*.cxx:*.cpp:*.h:*.hxx:*.hpp:*.ush:*.usf:!*Engine/Source/ThirdParty/*:!*Saved/*:!*Templates/*'
+let g:coc_list_rg_glob = '*.$ext:*.c:*.cc:*.cxx:*.cpp:*.h:*.hxx:*.inl:*.hpp:*.ush:*.usf:!*Engine/Source/ThirdParty/*:!*Saved/*:!*Templates/*'
 
 let s:float_win_hidden = []
 
@@ -149,7 +149,7 @@ function s:execute_coc_list(lst, w = '')
         cd .
     endif
 
-    let cmd = printf('CocList --number-select --ignore-case %s %s %s',
+    let cmd = printf('CocList --ignore-case %s %s %s',
                 \ (a:lst == 'grep' || a:lst == 'symbols' ? '-I' : a:lst == 'mru' ? '-A' : ''),
                 \ w,
                 \ a:lst.(a:lst == 'grep' ? ' '.g:coc_list_grep_options : ''))
@@ -186,7 +186,6 @@ autocmd FileType python,cpp,c nmap <buffer> <S-F12> :call CocActionAsync('jumpRe
 autocmd FileType python,cpp,c nmap <buffer> <F1> :call CocActionAsync('doHover')<CR>
 
 function bundle#coc#register_menu_to_coc()
-    if !has('gui') | return | endif
     try
         for [k, v] in items(g:function#registered_menu_entries)
             let escaped_k = substitute(k, '\\', '', 'g')
@@ -197,5 +196,9 @@ function bundle#coc#register_menu_to_coc()
     catch
     endtry
 endfunction
+
+if has('gui')
+    autocmd VimEnter * call bundle#coc#register_menu_to_coc()
+endif
 
 call function#process_script(expand('<sfile>'), expand('<SID>'))

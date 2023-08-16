@@ -1,4 +1,4 @@
-let g:OmniSharp_server_path = "D:/Programma/OmniSharp/OmniSharp.exe"
+let g:OmniSharp_server_path = "omnisharp"
 let g:OmniSharp_highlighting = 0
 
 autocmd FileType cs nmap <buffer> <F12> :OmniSharpGotoDefinition<CR>

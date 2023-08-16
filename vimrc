@@ -37,7 +37,7 @@ endif
 
 
 filetype plugin indent on
-au FileType html setl sw=2 sts=2 et
+au FileType html,typescript,typescriptreact setl sw=2 sts=2 et
 au BufRead,BufNewFile *.cl,*.cginc,*.hlsl,*.shader setl filetype=opencl
 au BufRead,BufNewFile *.md setl wrap
 au BufNewFile,BufRead *.cg,*.cginc set filetype=cg
@@ -186,6 +186,3 @@ endfunction
 
 call function#process_script(expand('<sfile>'), expand('<SID>'))
 
-call bundle#coc#register_menu_to_coc()
-
-let g:vimrc_done = 1

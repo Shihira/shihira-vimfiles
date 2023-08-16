@@ -8,3 +8,6 @@ imap ∆ <A-j>
 imap ˚ <A-k>
 
 command W silent w !sudo tee % > /dev/null
+
+let g:sep = "/"
+

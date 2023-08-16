@@ -16,7 +16,7 @@
             "command": "pylsp",
             "filetypes": ["python"],
             "settings": {
-                "pylsp.plugins.pycodestyle.ignore": ["E501", "E302", "E305", "W391"]
+                "pylsp.plugins.pycodestyle.ignore": ["E501", "E302", "E305", "W391", "W191"]
             }
         },
         "rls": {
@@ -37,8 +37,21 @@
     },
     "list": {
         "source": {
-            "mru.excludePatterns": ["**\\AppData\\Local\\Temp\\*"]
+            "mru": {
+                "excludePatterns" : [
+                    "**/AppData/Local/Temp/**"
+                ]
+            },
+            "files": {
+                "filterByName": true
+            }
         }
+    },
+    "list.insertMappings": {
+        "<C-r>": "do:refresh",
+        "<A-j>": "feedkeys:\\<Down>",
+        "<A-k>": "feedkeys:\\<Up>",
+        "<A-o>": "do:defaultaction"
     }
 }
 

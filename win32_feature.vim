@@ -17,7 +17,15 @@ except:
 gw.getActiveWindow().moveTo(-10,0)
 gw.getActiveWindow().resizeTo(1920*4+20, 1080*2-50)
 EOF
+    vs | q
+    let cur_winnr = winnr()
+    let max_winnr = winnr('$')
+    exec (max_winnr / 2).'wincmd w'
+    2wincmd >
+    exec cur_winnr.'wincmd w'
 endfunction
 
 call function#process_script(expand('<sfile>'), expand('<SID>'))
+
+let g:sep = "\\"
 
