@@ -88,7 +88,7 @@ function! function#process_script_variable(annotations)
 
         let func_name = printf('function#ask_for_option("%s", "%s", "%s", %s)',
                     \ var_name,
-                    \ typename(g:[var_name]),
+                    \ (has('nvim') ? '' : typename(g:[var_name])),
                     \ get(a:annotations, 'tips', ''),
                     \ split(get(a:annotations, 'options', ''), '|'))
         let cmd = printf('nmenu %s :call %s<CR>',
@@ -143,7 +143,7 @@ endfunction
 
 function! function#process_script(fname, sid, phase = "initial")
     if v:version < 800 | return | endif
-    if !has('gui') | return | endif
+    if !has('gui') && !has('nvim') | return | endif
     if has('ios') | return | endif
     let lines = readfile(a:fname)
 

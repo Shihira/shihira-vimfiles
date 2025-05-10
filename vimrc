@@ -10,7 +10,6 @@ set hlsearch
 set incsearch
 set autoindent
 set cindent
-set guioptions=egmr "t
 "set showtabline=0
 set number
 set ruler
@@ -28,16 +27,14 @@ set wildmode=list:longest,full
 set viewoptions=
 set sessionoptions=winsize,winpos,tabpages
 if has('pythonx') | set pyxversion=3 | endif
-if has("gui_running") && !exists('g:vimrc_done')
-    set lines=60 columns=250
-endif
 
 "let &colorcolumn=join(range(81,999),",")
 "let &fillchars="vert: "
 
 
 filetype plugin indent on
-au FileType html,typescript,typescriptreact setl sw=2 sts=2 et
+"au FileType html,typescript,typescriptreact setl sw=2 sts=2 et
+au FileType html setl sw=2 sts=2 et
 au BufRead,BufNewFile *.cl,*.cginc,*.hlsl,*.shader setl filetype=opencl
 au BufRead,BufNewFile *.md setl wrap
 au BufNewFile,BufRead *.cg,*.cginc set filetype=cg
@@ -45,9 +42,11 @@ au BufNewFile,BufRead *.ll set filetype=llvm
 au BufNewFile,BufRead *.hlsl,*.hlslc,*.hlslh,*.hlsl,*.compute,*.usf,*.ush set filetype=hlsl
 au BufNewFile,BufRead *.glsl,*.geom,*.vert,*.frag,*.gsh,*.vsh,*.fsh,*.vs,*.fs set filetype=glsl
 au BufNewFile,BufRead *.shader set filetype=shaderlab
-au BufNewFile,BufRead */Trunk/* setl noexpandtab
+au BufNewFile,BufRead */NGR/* setl noexpandtab
+au BufNewFile,BufRead */NGR/* let &efm = "%f(%l): %trror %m,%f:%l:%c: %trror %m"
 au TabEnter * silent! execute "cd ".t:cwd
 au TabLeave * let t:cwd = getcwd()
+au BufReadPre * if getfsize(expand("%")) > 5000000 | set eventignore=all | setl bufhidden=unload | setl undolevels=5 | endif
 
 "//////////////////////////////////////////////////////////
 "Platform detection and settings
@@ -58,9 +57,19 @@ exec "source $VIMFILES/".(
             \ has("ios") ? "ios" :
             \ "unix")."_feature.vim"
 
+if has("gui_running") && !exists('g:vimrc_done')
+    set lines=60 columns=250
+endif
+
 for path in split(globpath($VIMFILES, 'bundle/**.vim'), "\n")
     exec "source " . path
 endfor
+
+if has('nvim')
+    for path in split(globpath($VIMFILES, 'bundle/**.lua'), "\n")
+        exec "source " . path
+    endfor
+endif
 
 "//////////////////////////////////////////////////////////
 " MAPPING
@@ -82,7 +91,7 @@ imap <BS> <Left><Del>
 nnoremap / :nohl\|set nocul<CR>/
 nmap <C-Tab> :tabn<CR>
 nmap <C-S-Tab> :tabp<CR>
-imap <C-S-V> <C-O>"+P
+imap <C-S-V> <C-\><C-O>"+P
 cmap <C-S-V> <C-R>+
 vmap <C-S-C> "+y
 nmap <C-h> <C-w>h
@@ -95,6 +104,12 @@ command! -nargs=1 Recode e ++enc=<args>
 colorscheme arcadia
 syntax enable
 syntax on
+
+if has('nvim')
+    highlight WinSeparator guifg=#444444
+else
+    set guioptions=egmr "t
+endif
 
 "//////////////////////////////////////////////////////////
 " FUNCTIONALITIES
@@ -179,10 +194,44 @@ function! s:save_session()
 
     call writefile(sessionx_lines, expand("~/sessionx.vim"))
 endfunction
+
 " @bind-menu: Shihira.Restore\ Session
 function! s:restore_session()
     source ~/session.vim
 endfunction
 
-call function#process_script(expand('<sfile>'), expand('<SID>'))
+" @bind-menu: Shihira.Copy\ As\ Definition
+function! Copy_as_definition()
+    " get class name
+    let old_cursor = getpos('.')
+    let old_search = @/
+    let @/ = 'class\|struct'
+    norm [{N
+    let @/ = old_search
+    nohl
 
+    let class_name = getbufline('%', line('.'))[0]
+    let class_name = split(class_name, ':')[0]
+    let class_name = split(class_name)[-1]
+
+    call setpos('.', old_cursor)
+    "echo class_name
+
+    " replace
+    let result = ""
+    for _l in split(@0, '\n')
+        let l = trim(_l)
+        let l = substitute(l, '\s\(\S\+\s*(\)', ' '.class_name.'::\1', '')
+        let l = substitute(l, '\<static\>\s', '', '')
+        let l = substitute(l, '\<virtual\>\s', '', '')
+        let l = substitute(l, '\s\<override\>', '', '')
+        let l = substitute(l, ';', '\n{\n}\n', '')
+        let result .= l."\n"
+    endfor
+
+    "echo result
+    let @0 = result
+endfunction
+
+
+call function#process_script(expand('<sfile>'), expand('<SID>'))

@@ -1,9 +1,7 @@
 let s:has_coc = isdirectory(expand("$VIMFILES/bundle/coc"))
 
-inoremap <silent><expr> <TAB>
-      \ coc#pum#visible() ? coc#pum#confirm() :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
+inoremap <silent><expr> <TAB> coc#pum#visible() ? coc#pum#confirm() : "\<TAB>"
+inoremap <silent><expr> <A-/> coc#refresh()
 
 inoremap <silent><expr> <A-j>
       \ coc#pum#visible() ? coc#pum#next(1) : "\<Down>"
@@ -30,7 +28,7 @@ function! s:switch_source_header()
 
     " for unreal
     let l:alter_file = l:alter_file =~ ".*Public.*"  ? substitute(l:alter_file, "Public", "Private", "") :
-                                     \ ".*Classes.*" ? substitute(l:alter_file, "Classes", "Private", "") :
+                     \ l:alter_file =~ ".*Classes.*" ? substitute(l:alter_file, "Classes", "Private", "") :
                                                     \ substitute(l:alter_file, "Private", "Public", "")
 
     echo "Trying ".l:alter_file
@@ -135,6 +133,7 @@ function s:execute_coc_list(lst, w = '')
     if w != ''
         if g:coc_list_grep_wrap_word && (a:lst == 'grep')
             let w = substitute(w, ' ', '\\x20', 'g')
+            let w = substitute(w, '"', '\\x22', 'g')
             let w = '\b'.w.'\b'
         else
             let w = substitute(w, ' ', '\\ ', 'g')
@@ -178,7 +177,7 @@ vmap <Leader>g :call <SID>execute_coc_list("grep", "<selected>")<CR>
 vmap <Leader>f :call <SID>execute_coc_list("files", "<selected>")<CR>
 
 nmap <C-P> :CocCommand<CR>
-imap <C-P> <C-O>:CocCommand<CR>
+"imap <C-P> <C-O>:CocCommand<CR>
 vmap <C-P> :CocCommand<CR>
 
 autocmd FileType python,cpp,c nmap <buffer> <F12> :call CocActionAsync('jumpDefinition')<CR>
@@ -197,7 +196,7 @@ function bundle#coc#register_menu_to_coc()
     endtry
 endfunction
 
-if has('gui')
+if has('gui') || has('nvim')
     autocmd VimEnter * call bundle#coc#register_menu_to_coc()
 endif
 

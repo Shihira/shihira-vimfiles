@@ -6,12 +6,6 @@
             "filetypes": ["c", "cpp", "cuda", "objc", "objcpp"],
             "rootPatterns": ["compile_commands.json"]
         },
-        "pyls": {
-            "command": "pyls",
-            "filetypes": ["python"],
-            "settings": {
-            }
-        },
         "pylsp": {
             "command": "pylsp",
             "filetypes": ["python"],
@@ -29,6 +23,11 @@
             "filetypes": ["cmake"],
             "rootPatterns": [ "build/" ],
             "initializationOptions": { "buildDirectory": "build" }
+        },
+        "nix": {
+            "command": "nil",
+            "filetypes": ["nix"],
+            "rootPatterns":  ["flake.nix"]
         }
     },
     "suggest": {
@@ -51,7 +50,10 @@
         "<C-r>": "do:refresh",
         "<A-j>": "feedkeys:\\<Down>",
         "<A-k>": "feedkeys:\\<Up>",
-        "<A-o>": "do:defaultaction"
+        "<A-o>": "do:defaultaction",
+        "∆": "feedkeys:\\<Down>",
+        "˚": "feedkeys:\\<Up>",
+        "ø": "do:defaultaction"
     }
 }
 
